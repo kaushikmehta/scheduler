@@ -5,8 +5,7 @@ import InterviewerListItem from "./InterviewerListItem"
 
 export default function InterviewerList(props) {
   let buttonClass = classnames(
-    "interviewers__list", 
-    {}
+    "interviewers__list"
     );
 
   const parsedInterviewers = props.interviewers.map(interviewer => (
@@ -16,6 +15,7 @@ export default function InterviewerList(props) {
     avatar={interviewer.avatar}
     onClick-={props.setInterviewer}
     selected = {props.interviewer === interviewer.id}
+    setInterviewer={event => props.setInterviewer(interviewer.id)}
     /> 
   ))
   return (
