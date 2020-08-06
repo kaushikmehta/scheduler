@@ -5,66 +5,36 @@ import axios from 'axios'
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      },
-    },
-  },
-  {
-    id: 3,
-    time: "3pm",
-    interview: {
-      student: "Kaushik Mehta",
-      interviewer: {
-        id: 3,
-        name: "Mildred Nazir",
-        avatar: "https://i.imgur.com/T2WwVfS.png",
-      },
-    },
-  },
-  {
-    id: 4,
-    time: "4pm",
-  },
-  {
-    id: 5,
-    time: "5pm",
-    interview: {
-      student: "Notevena Student",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      },
-    },
-  },
-];
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application(props) {
-  const[days, setDays] = useState([]);
-  const [day, setDay] = useState("Monday");
+  // const[days, setDays] = useState([]);
+  // const [day, setDay] = useState("Monday");
+  // const [appointments, setAppointments] = useState([]);
+  let appointments={};
+  const [state, setState]=useState({
+    day:"Monday",
+    days: [],
+    appointments:[]
+  });
 
   useEffect(()=> {
-    axios.get("http://localhost:8001/api/days")
-    .then((response)=> {
-      setDays(response.data);
+    Promise.all([
+      axios.get("http://localhost:8001/api/days"),
+      axios.get("http://localhost:8001/api/appointments"),
+
+    ])
+    
+    .then((all)=> {
+      console.log(all)
+      setState(prev => ({...prev, days:all[0].data, appointments: all[1].data}));
     })
   }, [])
 
-  const parsedAppointments = appointments.map(appointment => (
+  const fetchedAppointments = getAppointmentsForDay(state, state.day);
+  console.log("app here", fetchedAppointments)
+  
+  const parsedAppointments = fetchedAppointments.map(appointment => (
     <Appointment key={appointment.id} {...appointment} />))
   parsedAppointments.push(<Appointment key="last" time="6pm" />)
 
@@ -79,9 +49,10 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            days={days}
-            day={day}
-            setDay={setDay} />
+            days={state.days}
+            day={state.day}
+            state={state}
+            setState={setState} /> 
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"

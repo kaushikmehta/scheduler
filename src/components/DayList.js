@@ -2,7 +2,7 @@ import React from 'react'
 import DayListItem from './DayListItem'
 
 export default function DayList(props) {
-  const { days, day, setDay } = props
+  const { days, day, state, setState } = props
 
   const parsedDays = days.map(oneDay => (
     <DayListItem
@@ -10,7 +10,8 @@ export default function DayList(props) {
       name={oneDay.name}
       spots={oneDay.spots}
       selected={oneDay.name === day}
-      setDay={setDay} />
+      state={state}
+      setState={setState} />
   ))
 
   return parsedDays;
