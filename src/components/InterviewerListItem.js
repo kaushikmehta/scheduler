@@ -2,13 +2,6 @@ import React from 'react'
 import classnames from 'classnames'
 import './InterviewerListItem.scss'
 
-
-{/* <InterviewerListItem
-id={interviewer.id}
-name={interviewer.name}
-avatar={interviewer.avatar}
-/> */}
-
 export default function InterviewerListItem(props) {
   const buttonClass = classnames(
     "interviewers__item",

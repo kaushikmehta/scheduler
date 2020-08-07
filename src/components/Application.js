@@ -5,7 +5,8 @@ import axios from 'axios'
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -20,13 +21,37 @@ export default function Application(props) {
       axios.get("http://localhost:8001/api/days"),
       axios.get("http://localhost:8001/api/appointments"),
       axios.get("http://localhost:8001/api/interviewers"),
-    ])
-
-      .then((all) => {
-        setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
-      })
+    ]).then((all) => {
+      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
+    }).catch((error) => {
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log(error.response.data);
+    });
   }, [])
 
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log(interview);
+    return axios
+      .put(`http://localhost:8001/api/appointments/${id}`, {
+        id,
+        interview
+      })
+      .then((response) => {
+        console.log(response);
+        setState(prev => ({ ...prev, appointments: appointments }));
+      })
+  }
+  
   const fetchedAppointments = getAppointmentsForDay(state, state.day);
   const parsedAppointments = fetchedAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
@@ -36,6 +61,8 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={getInterviewersForDay(state, state.day)}
+        bookInterview={bookInterview}
       />
     )
 
