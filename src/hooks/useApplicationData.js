@@ -1,24 +1,57 @@
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import axios from 'axios'
 
 export default function useApplicationData() {
 
-  const setDay = (day) => setState({ ...state, day });
+  const SET_DAY = "SET_DAY";
+  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+  const SET_INTERVIEW = "SET_INTERVIEW";
 
-  const [state, setState] = useState({
+  function reducer(state, action) {
+    switch (action.type) {
+      case SET_DAY:
+        return { ...state, day: action.value }
+      case SET_APPLICATION_DATA:
+        return { ...state, ...action.value }
+      case SET_INTERVIEW: {
+        return { ...state, ...action.value }
+      }
+      default:
+        throw new Error(
+          `Tried to reduce with unsupported action type: ${action.type}`
+        );
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
-    appointments: {},
-    interviewers: {}
+    appointments: {}
   });
+
+  const setDay = (day) => dispatch({
+    type: SET_DAY,
+    value: {
+      ...state,
+      day
+    }
+  });
+
   useEffect(() => {
     Promise.all([
       axios.get("http://localhost:8001/api/days"),
       axios.get("http://localhost:8001/api/appointments"),
       axios.get("http://localhost:8001/api/interviewers"),
     ]).then((all) => {
-      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }
-      ));
+      dispatch({
+        type: SET_APPLICATION_DATA,
+        value: {
+          ...state,
+          days: all[0].data,
+          appointments: all[1].data,
+          interviewers: all[2].data
+        }
+      })
     }).catch((error) => {
       console.log(error.response.status);
       console.log(error.response.headers);
@@ -47,9 +80,17 @@ export default function useApplicationData() {
           const today = state.days.find(day => day.appointments.includes(id));
           const dayToChangeSpotsFor = newDays.find(newDay => newDay.id === today.id);
           dayToChangeSpotsFor.spots = dayToChangeSpotsFor.spots - 1;
-        //////////
+          //////////
         }
-        setState(prev => ({ ...prev, appointments: appointments, days: newDays }));
+
+        dispatch({
+          type: SET_APPLICATION_DATA,
+          value: {
+            ...state,
+            appointments: appointments,
+            days: newDays
+          }
+        })
       })
   }
 
@@ -63,8 +104,8 @@ export default function useApplicationData() {
         appointment
       )
       .then((response) => {
-        const changeInterview = (prev) => {
-          return { ...prev.appointments, [id]: { ...prev.appointments[id], interview: null } }
+        const changeInterview = (state) => {
+          return { ...state.appointments, [id]: { ...state.appointments[id], interview: null } }
         }
         // use .find to find the day that has this appointment id,
         const today = state.days.find(day => day.appointments.includes(id));
@@ -74,8 +115,14 @@ export default function useApplicationData() {
         // increment
         const dayToChangeSpotsFor = newDays.find(newDay => newDay.id === today.id);
         dayToChangeSpotsFor.spots = dayToChangeSpotsFor.spots + 1;
-
-        setState(prev => ({ ...prev, appointments: changeInterview(prev), days: newDays }));
+        dispatch({
+          type: SET_APPLICATION_DATA,
+          value: {
+            ...state,
+            appointments: changeInterview(state),
+            days: newDays
+          }
+        })
       })
   }
   return {
