@@ -27,7 +27,7 @@ export default function Appointment(props) {
 
   function save(name, interviewer, changeSpots) {
     console.log("CS ON INDEX", changeSpots);
-
+    
     if (interviewer) {
       const interview = {
         student: name,
@@ -42,8 +42,9 @@ export default function Appointment(props) {
           transition(ERROR_SAVE, true)
         });
     } else {
-      transition(ERROR_INTERVIEWER, true)
+      transition(ERROR_INTERVIEWER)
     }
+
   }
 
   function deleteInterview(id) {
