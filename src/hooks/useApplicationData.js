@@ -29,13 +29,13 @@ export default function useApplicationData() {
     appointments: {}
   });
 
-  const setDay = (day) => dispatch({
-    type: SET_DAY,
-    value: {
-      ...state,
-      day
-    }
-  });
+  const setDay = (day) => {
+    console.log(day);
+    dispatch({
+      type: SET_DAY,
+      value: day
+    })
+  };
 
   useEffect(() => {
     Promise.all([
