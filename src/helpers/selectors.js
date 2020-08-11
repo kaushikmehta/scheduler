@@ -1,16 +1,47 @@
 export function getAppointmentsForDay(state, day) {
   const filteredDay = state.days.find(oneDay => oneDay.name === day);
-  let appointmentsArray = [];
-  let results = [];
 
   if (filteredDay && filteredDay.appointments) {
-    appointmentsArray = filteredDay.appointments;
-    results = appointmentsArray.map(appointmentNumber => state.appointments[appointmentNumber]
+    const appointmentsArray = filteredDay.appointments;
+    return appointmentsArray.map(appointmentNumber => state.appointments[appointmentNumber]
+    )
+  }
+  return [];
+}
+
+// NOTE TO KAUSH: update based on func. prog. princ.
+export function getInterview(state, interview) {
+  if (interview) {
+
+    let resultObj = {
+      "student": interview.student,
+      "interviewer": {}
+    };
+
+    const interviewerObject = state.interviewers[interview.interviewer]
+    interviewerObject ?
+      resultObj = { ...resultObj, interviewer: state.interviewers[interview.interviewer] }
+      : resultObj = null;
+    return resultObj;
+  } else {
+    return null
+  }
+}
+
+export function getInterviewersForDay(state, day) {
+  const filteredDay = state.days.find(oneDay => oneDay.name === day);
+  let interviewersArray = [];
+  let results = [];
+
+  if (filteredDay && filteredDay.interviewers) {
+    interviewersArray = filteredDay.interviewers;
+    results = interviewersArray.map(interviewerNumber => state.interviewers[interviewerNumber]
     )
   }
 
   return results
 }
+
 
 // const state = {
 //   "day": "Monday",
@@ -216,36 +247,3 @@ export function getAppointmentsForDay(state, day) {
 //   }
 // }
 // const interview = {student: "Jamal Jordan", interviewer: 3}
-
-
-export function getInterview(state, interview) {
-  if (interview) {
-
-    let resultObj = {
-      "student": interview.student,
-      "interviewer": {}
-    };
-
-    const interviewerObject = state.interviewers[interview.interviewer]
-    interviewerObject ?
-      resultObj = { ...resultObj, interviewer: state.interviewers[interview.interviewer] }
-      : resultObj = null;
-    return resultObj;
-  } else {
-    return null
-  }
-}
-
-export function getInterviewersForDay(state, day) {
-  const filteredDay = state.days.find(oneDay => oneDay.name === day);
-  let interviewersArray = [];
-  let results = [];
-
-  if (filteredDay && filteredDay.interviewers) {
-    interviewersArray = filteredDay.interviewers;
-    results = interviewersArray.map(interviewerNumber => state.interviewers[interviewerNumber]
-    )
-  }
-
-  return results
-}

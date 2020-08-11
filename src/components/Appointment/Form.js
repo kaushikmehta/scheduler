@@ -16,15 +16,18 @@ export default function Form(props) {
     reset();
     props.onCancel();
   }
+
   function validate() {
     if (name === "") {
       setError("Student name cannot be blank");
       return;
+    } else if (!interviewer) {
+      setError("Please select an Interviewer from the list");
+      return;
     }
   
-    props.onSave(name, interviewer);
     setError("")
-    // props.onSave(name, interviewer, props.changeSpots); // NOTETOKAUSH: Find another way to changespots (using dispatch)
+    props.onSave(name, interviewer);
   }
 
   return (
@@ -39,9 +42,6 @@ export default function Form(props) {
             value={name}
             onChange={e => setName(e.target.value)}
             data-testid="student-name-input"
-          /*
-            This must be a controlled component
-          */
           />
         <section className="appointment__validation">{error}</section>
         <InterviewerList interviewers={props.interviewers} value={interviewer} onChange={setInterviewer} />

@@ -9,7 +9,7 @@ import Status from './Status'
 import Confirm from './Confirm'
 import Error from './Error'
 
-
+// NOTETOKAUSH: destructure in props and remove props. EVERYWHERE
 export default function Appointment(props) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -25,27 +25,20 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  function save(name, interviewer, changeSpots) {
-    console.log("CS ON INDEX", changeSpots);
-    
-    if (interviewer) {
-      const interview = {
-        student: name,
-        interviewer
-      };
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    }
       transition(SAVING);
-      props.bookInterview(props.id, interview, changeSpots)
+      props.bookInterview(props.id, interview)
         .then(() => {
           transition(SHOW);
         }).catch((error) => {
-          console.log(error)
+          console.log("Error Booking Interview: ", error)
           transition(ERROR_SAVE, true)
-        });
-    } else {
-      transition(ERROR_INTERVIEWER)
+        }) 
     }
-
-  }
 
   function deleteInterview(id) {
     transition(DELETING, true);

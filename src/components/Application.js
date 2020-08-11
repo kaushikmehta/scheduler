@@ -35,7 +35,7 @@ export default function Application() {
 
   parsedAppointments.push(<Appointment key="last" time="5pm" />)
 
-
+  console.log(state)
 
   return (
     <main className="layout">

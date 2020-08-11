@@ -3,10 +3,7 @@ import "./DayListItem.scss"
 import classnames from "classnames"
 
 
-export default function DayListItem(props) {
-
-  const { name, spots, setDay } = props;
-
+export default function DayListItem( { name, spots, setDay, selected }) {
   const formatSpots = (spots) => {
     let spotsRemaining = "";
 
@@ -23,10 +20,11 @@ export default function DayListItem(props) {
 
   let buttonClass = classnames(
     "day-list__item",
-    { "day-list__item--selected": props.selected },
+    { "day-list__item--selected": selected },
     { "day-list__item--full": spots === 0 }
   );
 
+  // function handleDispatch (){} // NOTTOKAUSH
   return (
     <li className={buttonClass} onClick={() => setDay(name)}>
       <h2 className="text--regular">{name}</h2>
