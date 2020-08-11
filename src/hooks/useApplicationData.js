@@ -74,12 +74,22 @@ export default function useApplicationData() {
       if (messageObject.type === "SET_INTERVIEW"){
         const id = messageObject.id;
         const messageInterview = messageObject.interview;
-        
+
         dispatch({
           type: SET_INTERVIEW,
           id,
           interview: messageInterview
         })
+
+        return axios.get("http://localhost:8001/api/days")
+          .then((response) => {
+            dispatch({
+              type: SET_SPOTS,
+              days: response.data
+            })
+          }).catch((error) => {
+            console.log("ERR", error);
+          });
       }
 
     }
