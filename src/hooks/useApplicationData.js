@@ -1,5 +1,6 @@
 import { useReducer, useEffect } from "react";
 import axios from 'axios'
+import { func } from "prop-types";
 
 //NOTETOKAUSH: Move reducer to separate file
 export default function useApplicationData() {
@@ -59,6 +60,29 @@ export default function useApplicationData() {
   });
 
   useEffect(() => {
+
+    const socket = new WebSocket("ws://localhost:8001");
+
+    socket.onopen= function(){
+      socket.send("ping");
+  }
+
+    socket.onmessage= function(event) {
+      const messageObject = JSON.parse(event.data)
+      console.log("WS message:",messageObject);
+
+      if (messageObject.type === "SET_INTERVIEW"){
+        const id = messageObject.id;
+        const messageInterview = messageObject.interview;
+        
+        dispatch({
+          type: SET_INTERVIEW,
+          id,
+          interview: messageInterview
+        })
+      }
+
+    }
 
     Promise.all([
       axios.get("http://localhost:8001/api/days"),
