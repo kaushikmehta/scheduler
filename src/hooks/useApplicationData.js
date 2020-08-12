@@ -1,6 +1,5 @@
 import { useReducer, useEffect } from "react";
 import axios from 'axios'
-import { func } from "prop-types";
 
 //NOTETOKAUSH: Move reducer to separate file
 export default function useApplicationData() {
@@ -69,7 +68,6 @@ export default function useApplicationData() {
 
     socket.onmessage= function(event) {
       const messageObject = JSON.parse(event.data)
-      console.log("WS message:",messageObject);
 
       if (messageObject.type === "SET_INTERVIEW"){
         const id = messageObject.id;
@@ -99,7 +97,6 @@ export default function useApplicationData() {
       axios.get("http://localhost:8001/api/appointments"),
       axios.get("http://localhost:8001/api/interviewers"),
     ]).then((all) => {
-
       dispatch({
         type: SET_APPLICATION_DATA,
         value: {
