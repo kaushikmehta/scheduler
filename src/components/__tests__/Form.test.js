@@ -73,7 +73,6 @@ describe("Form", () => {
       <Form
         interviewers={interviewers}
         name="Lydia Mill-Jones"
-        // onSave={jest.fn()}
         onCancel={onCancel}
       />
     );
