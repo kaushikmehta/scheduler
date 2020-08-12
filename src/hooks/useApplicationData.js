@@ -9,8 +9,6 @@ import reducer, {
 } from "reducers/application";
 
 export default function useApplicationData() {
-  
-
   const setDay = (day) => dispatch(
     {
       type: SET_DAY,

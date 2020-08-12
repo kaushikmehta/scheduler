@@ -18,6 +18,7 @@ export default function Form(props) {
   }
 
   function validate() {
+    console.log("validate in form called")
     if (name === "") {
       setError("Student name cannot be blank");
       return;
@@ -25,7 +26,6 @@ export default function Form(props) {
       setError("Please select an Interviewer from the list");
       return;
     }
-  
     setError("")
     props.onSave(name, interviewer);
   }

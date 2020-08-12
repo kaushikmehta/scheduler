@@ -34,8 +34,10 @@ export default function reducer(state, action) {
         }
       }
       return newState
-    default:
-      return state
+      default:
+        throw new Error(
+          `Tried to reduce with unsupported action type: ${action.type}`
+        );
   }
 }
 
