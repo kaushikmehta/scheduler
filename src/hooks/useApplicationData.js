@@ -1,48 +1,15 @@
 import { useReducer, useEffect } from "react";
 import axios from 'axios'
 
-//NOTETOKAUSH: Move reducer to separate file
-export default function useApplicationData() {
-  const SET_DAY = "SET_DAY"
-  const SET_INTERVIEW = "SET_INTERVIEW"
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA"
-  const SET_SPOTS = "SET_SPOTS"
+import reducer, {
+  SET_DAY,
+  SET_APPLICATION_DATA,
+  SET_INTERVIEW,
+  SET_SPOTS
+} from "reducers/application";
 
-  function reducer(state, action) {
-    switch (action.type) {
-      case SET_DAY:
-        return {
-          ...state,
-          day: action.day
-        }
-      case SET_APPLICATION_DATA:
-        return {
-          ...state,
-          ...action.value
-        }
-      case SET_SPOTS:
-        return {
-          ...state,
-          days: action.days
-        }
-      case SET_INTERVIEW:
-        const id = action.id;
-        const interview = action.interview;
-        const newState = {
-          ...state,
-          appointments: {
-            ...state.appointments,
-            [id]: {
-              ...state.appointments[id],
-              interview
-            }
-          }
-        }
-        return newState
-      default:
-        return state
-    }
-  }
+export default function useApplicationData() {
+  
 
   const setDay = (day) => dispatch(
     {
@@ -62,14 +29,14 @@ export default function useApplicationData() {
 
     const socket = new WebSocket("ws://localhost:8001");
 
-    socket.onopen= function(){
+    socket.onopen = function () {
       socket.send("ping");
-  }
+    }
 
-    socket.onmessage= function(event) {
+    socket.onmessage = function (event) {
       const messageObject = JSON.parse(event.data)
 
-      if (messageObject.type === "SET_INTERVIEW"){
+      if (messageObject.type === "SET_INTERVIEW") {
         const id = messageObject.id;
         const messageInterview = messageObject.interview;
 
