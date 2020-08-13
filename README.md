@@ -40,4 +40,4 @@ npm run storybook
 ```
 
 ## Local DB instructions
-Navigate to [Scheduler-API]("https://github.com/kaushikmehta/scheduler-api") and follow instructions to set up a local Postgres Database
+Navigate to [Scheduler-API](https://github.com/kaushikmehta/scheduler-api) and follow instructions to set up a local Postgres Database
