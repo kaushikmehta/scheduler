@@ -18,7 +18,10 @@ export default function Form({interviewer, interviewers, onCancel, onSave, name}
   }
 
   function validate() {
-    console.log("validate in form called")
+
+    //Validates Student Name cannot be blank
+    //Additionally Validates unselected interviewer
+    // to avoid crashing the app
     if (studentName === "") {
       setError("Student name cannot be blank");
       return;

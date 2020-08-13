@@ -29,12 +29,10 @@ export default function Application() {
         cancelInterview={cancelInterview}
       />
     )
-
   })
 
-
+  // Adds last appointment to parsed appointments array
   parsedAppointments.push(<Appointment key="last" time="5pm" />)
-
 
   return (
     <main className="layout">

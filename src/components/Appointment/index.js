@@ -20,10 +20,9 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
   const ERROR_SAVE = "ERROR_SAVE";
   const ERROR_DELETE = "ERROR_DELETE";
   const ERROR_INTERVIEWER = "ERROR_INTERVIEWER";
-  const { mode, transition, back } = useVisualMode(
-    interview ? SHOW : EMPTY
-  );
+  const { mode, transition, back } = useVisualMode( interview ? SHOW : EMPTY ); // Ternary to decide on intial Visual Mode
 
+  //Calls bookInterview function that triggers dispatch to reducer
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -39,6 +38,7 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
         }) 
     }
 
+  //Calls cancelInterview function that triggers dispatch to reducer
   function deleteInterview(id) {
     transition(DELETING, true);
     cancelInterview(id)
@@ -49,6 +49,9 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
       });
   }
 
+
+  // Updates everytime the interview, transition or mode variables change
+  // to accurately display state of appointment
   useEffect(() => {
     if (interview && mode === EMPTY) {
       transition(SHOW);
@@ -62,8 +65,8 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
     <article data-testid="appointment" className="appointment">
       <Header time={time} />
 
-
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+
       {mode === SHOW && interview && (
         <Show
           student={interview.student}
@@ -72,6 +75,7 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
           onEdit={() => transition(EDIT)}
         />
       )}
+
       {mode === CREATE && (
         <Form
           interviewers={interviewers}
@@ -80,6 +84,7 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
           changeSpots={true}
         />
       )}
+
       {mode === EDIT && (
         <Form
           name={interview.student}
@@ -89,11 +94,17 @@ export default function Appointment({id, interview, interviewers, time, cancelIn
           interviewer={interview.interviewer.id}
         />
       )}
+
       {mode === SAVING && <Status message={"Saving Interview"} />}
+
       {mode === CONFIRM && <Confirm message={"Are you sure you want to Delete this Interview?"} onDelete={deleteInterview} onCancel={() => back()} id={id} />}
+
       {mode === DELETING && <Status message={"DELETING Interview"} />}
+
       {mode === ERROR_SAVE && <Error message={"Could not save appointment"} onClose={back} />}
+
       {mode === ERROR_DELETE && <Error message={"Could not delete appointment"} onClose={back} />}
+      
       {mode === ERROR_INTERVIEWER && <Error message={"Please Select an Interviewer"} onClose={back} />}
 
     </article>
