@@ -62,6 +62,7 @@ describe("Application Component Tests", () => {
       container,
       "appointment"
     ).find((appointment) => queryByText(appointment, "Archie Cohen"));
+
     fireEvent.click(getByAltText(appointment, "Edit"));
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
       target: { value: "Kaush" },
