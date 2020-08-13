@@ -5,21 +5,21 @@ import InterviewerListItem from "./InterviewerListItem"
 import PropTypes from 'prop-types';
 
 
-export default function InterviewerList(props) {
+export default function InterviewerList({interviewers, onChange, value}) {
   let buttonClass = classnames(
     "interviewers__list"
     );
 
   const parsedInterviewers = [];
-  for (const interviewerId in props.interviewers){
+  for (const interviewerId in interviewers){
     parsedInterviewers.push((
       <InterviewerListItem
-        key={props.interviewers[interviewerId].id}
-        id={props.interviewers[interviewerId].id}
-        name={props.interviewers[interviewerId].name}
-        avatar={props.interviewers[interviewerId].avatar}
-        setInterviewer={props.onChange}
-        selected = {props.value === props.interviewers[interviewerId].id}
+        key={interviewers[interviewerId].id}
+        id={interviewers[interviewerId].id}
+        name={interviewers[interviewerId].name}
+        avatar={interviewers[interviewerId].avatar}
+        setInterviewer={onChange}
+        selected = {value === interviewers[interviewerId].id}
         /> 
     ))
   }

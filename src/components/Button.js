@@ -4,16 +4,16 @@ import classnames from "classnames"
 
 import "components/Button.scss";
 
-export default function Button(props) {
+export default function Button({confirm, danger, onClick, disabled, children}) {
    
-   let buttonClass = classnames("button", {"button--confirm":props.confirm}, {"button--danger":props.danger});
+   let buttonClass = classnames("button", {"button--confirm":confirm}, {"button--danger":danger});
    return (
       <button
-         onClick={props.onClick}
-         disabled={props.disabled}
+         onClick={onClick}
+         disabled={disabled}
          className={buttonClass}
       >
-         {props.children}
+         {children}
       </button>
    );
 }
